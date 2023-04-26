@@ -12,7 +12,7 @@ class LogRecordStreamHandler(socketserver.StreamRequestHandler):
     This basically logs the record using whatever logging policy is
     configured locally.
     """
-
+u
     def handle(self):
         """
         Handle multiple requests - each expected to be a 4-byte length,
@@ -38,6 +38,7 @@ class LogRecordStreamHandler(socketserver.StreamRequestHandler):
         # if a name is specified, we use the named logger rather than the one
         # implied by the record.
         if self.server.logname is not None:
+
             name = self.server.logname
         else:
             name = record.name

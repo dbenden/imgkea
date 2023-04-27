@@ -43,7 +43,7 @@ class _StreamingHandler(server.BaseHTTPRequestHandler):
                 while True:
                     with self.condition:
                         self.condition.wait()
-                        new_frame = self.frame.get_nowait()
+                        new_frame = self.frame.get()
 
                     if new_frame is not None:
                         frame = new_frame
@@ -69,7 +69,7 @@ class _StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
 
 
 class MJPGStream(ConsumerProducer):
-    def __init__(self, port, bufsize=2):
+    def __init__(self, port, bufsize=10):
         super().__init__()
         self.handler = _StreamingHandler
         self.condition = Condition()

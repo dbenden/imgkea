@@ -28,7 +28,6 @@ logger = get_logger()
 
 class _StreamingHandler(server.BaseHTTPRequestHandler):
     frame = None
-    condition = None
 
     def do_GET(self):
         if self.condition is None:
@@ -70,9 +69,7 @@ class MJPGStream(ConsumerProducer):
     def __init__(self, port, bufsize=10):
         super().__init__()
         self.handler = _StreamingHandler
-        self.condition = Condition()
         self.__frame_queue = Queue()
-        self.handler.condition = self.condition
         self.handler.frame = self.__frame_queue
         self.server = _StreamingServer(('', port), self.handler)
         self.__server_process = Process(target=self.server.serve_forever)

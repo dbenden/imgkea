@@ -73,7 +73,7 @@ class Frame:
     timestamp: float
     boundingbox: list[BoundingBox] = None
     keypoints: list[Keypoint] = None
-    userdata: dict[str, Any]
+    userdata: dict[str, Any] = None
 
     def tobytes(self):
         return self.img.tobytes()

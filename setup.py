@@ -10,4 +10,5 @@ setup(name='imgkea',
       author_email='dbenden@danielbenden.nl',
       url='',
       packages=['imgkea', 'imgkea.interfaces'],
+      install_requires=['opencv-python', 'picamera2']
      )

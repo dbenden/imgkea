@@ -1,10 +1,40 @@
-import pickle
+#            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+#                    Version 2, December 2004
+#
+# Copyright (C) 2023 Benden, Daniel <dbenden@danielbenden.nl>
+#
+# Everyone is permitted to copy and distribute verbatim or modified
+# copies of this license document, and changing it is allowed as long
+# as the name is changed.
+#
+#            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+#   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+#
+#  0. You just DO WHAT THE FUCK YOU WANT TO.
+
+# Copyright (C) 2023  Benden, Daniel <dbenden@danielbenden.nl>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 import logging
 import logging.handlers
+import pickle
+import select
 import socketserver
 import struct
 
-## From the python documentation
+# From the python documentation
 
 class LogRecordStreamHandler(socketserver.StreamRequestHandler):
     """Handler for a streaming logging request.
@@ -12,7 +42,7 @@ class LogRecordStreamHandler(socketserver.StreamRequestHandler):
     This basically logs the record using whatever logging policy is
     configured locally.
     """
-u
+
     def handle(self):
         """
         Handle multiple requests - each expected to be a 4-byte length,
@@ -65,12 +95,11 @@ class LogSocketReceiver(socketserver.ThreadingTCPServer):
         self.logname = None
 
     def serve_until_stopped(self):
-        import select
         abort = 0
         while not abort:
-            rd, wr, ex = select.select([self.socket.fileno()],
-                                       [], [],
-                                       self.timeout)
+            rd, _, _ = select.select([self.socket.fileno()],
+                                     [], [],
+                                     self.timeout)
             if rd:
                 self.handle_request()
-            abort = self.abor
+            abort = self.abort

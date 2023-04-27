@@ -1,9 +1,25 @@
+# Copyright (C) 2023  Benden, Daniel <dbenden@danielbenden.nl>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 import logging
-import cv2
+import socketserver
+from http import server
 from multiprocessing import Process, Condition, Queue, get_logger
 from queue import Empty
-from http import server
-import socketserver
+
+import cv2
 
 from imgkea.interfaces.process import ConsumerProducer, Consumer
 
@@ -11,6 +27,7 @@ from imgkea.interfaces.process import ConsumerProducer, Consumer
 class _StreamingHandler(server.BaseHTTPRequestHandler):
     frame = None
     condition = None
+
     def do_GET(self):
         if self.condition is None:
             raise Exception("No condition set")
@@ -30,7 +47,7 @@ class _StreamingHandler(server.BaseHTTPRequestHandler):
 
                     if new_frame is not None:
                         frame = new_frame
-                    
+
                     self.wfile.write(b'--FRAME\r\n')
                     self.send_header('Content-Type', 'image/jpeg')
                     self.send_header('Content-Length', len(frame))
@@ -44,6 +61,7 @@ class _StreamingHandler(server.BaseHTTPRequestHandler):
         else:
             self.send_error(404)
             self.end_headers()
+
 
 class _StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True

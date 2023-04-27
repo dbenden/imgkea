@@ -1,12 +1,26 @@
+# Copyright (C) 2023  Benden, Daniel <dbenden@danielbenden.nl>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 import cv2
-import numpy as np
 
 from imgkea.interfaces.source import Camera
 
 class OpenCVCamera(Camera):
-    def __init__(self, 
-                 camera_id: int = 0 , 
-                 size: tuple[int, int] = (640,480), 
+    def __init__(self,
+                 camera_id: int = 0,
+                 size: tuple[int, int] = (640, 480),
                  fps: int = 30):
 
         super().__init__()
@@ -18,7 +32,7 @@ class OpenCVCamera(Camera):
         self.__src.set(cv2.CAP_PROP_FPS, fps)
 
     def get_image(self):
-            ret, frame = self.__src.read()
-            if ret:
-                return frame
-            return None
+        ret, frame = self.__src.read()
+        if ret:
+            return frame
+        return None

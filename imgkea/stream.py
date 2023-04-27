@@ -16,13 +16,15 @@
 import logging
 import socketserver
 from http import server
-from multiprocessing import Process, Condition, Queue, get_logger
+from multiprocessing import Process, Queue, get_logger
 from queue import Empty
 
 import cv2
 
 from imgkea.interfaces.process import ConsumerProducer, Consumer
 
+
+logger = get_logger()
 
 class _StreamingHandler(server.BaseHTTPRequestHandler):
     frame = None
@@ -41,13 +43,9 @@ class _StreamingHandler(server.BaseHTTPRequestHandler):
             self.end_headers()
             try:
                 while True:
-                    with self.condition:
-                        self.condition.wait()
-                        new_frame = self.frame.get()
-
+                    new_frame = self.frame.get()
                     if new_frame is not None:
                         frame = new_frame
-
                     self.wfile.write(b'--FRAME\r\n')
                     self.send_header('Content-Type', 'image/jpeg')
                     self.send_header('Content-Length', len(frame))
@@ -91,8 +89,6 @@ class MJPGStream(ConsumerProducer):
     def execute(self, frame):
         res, jpg = cv2.imencode(".jpg", frame.img)
         if res:
-            with self.condition:
-                self.clear()
-                self.__frame_queue.put(jpg)
-                self.condition.notify_all()
+            self.clear()
+            self.__frame_queue.put(jpg)
         return frame

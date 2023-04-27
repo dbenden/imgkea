@@ -22,7 +22,7 @@ class PiCamera(Camera):
     def __init__(self,
                  camera_id: int = 0,
                  size: tuple[int, int] = (640, 480),
-                 fps: int = 30):
+                 fps: int = 10):
 
         super().__init__()
         self.__camera_id = camera_id

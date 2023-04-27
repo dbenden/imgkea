@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+import time
 import picamera2
 
 from imgkea.interfaces.source import Camera
@@ -26,6 +26,7 @@ class PiCamera(Camera):
 
         super().__init__()
         self.__camera_id = camera_id
+        self.__fps = fps
         self.__src = picamera2.Picamera2()
         config = self.__src.create_video_configuration(main={"size": size})
         self.__src.video_configuration.controls.FrameRate = fps
@@ -34,4 +35,5 @@ class PiCamera(Camera):
 
     def get_image(self):
         frame = self.__src.capture_array()
+        time.sleep(1/self.__fps)
         return frame

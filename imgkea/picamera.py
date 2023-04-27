@@ -26,7 +26,7 @@ class PiCamera(Camera):
 
         super().__init__()
         self.__camera_id = camera_id
-        self.__src = picamera2.PiCamera()
+        self.__src = picamera2.Picamera2()
         config = self.__src.create_video_configuration(main={"size": size})
         self.__src.video_configuration.controls.FrameRate = fps
         self.__src.configure(config)
